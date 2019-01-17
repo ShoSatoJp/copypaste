@@ -1,6 +1,6 @@
 # Stacked Copy Paste
 VSCode extension. Copy and paste multiple text using stack.
-![](./README/000.gif)
+![](./README_ASSETS/000.gif)
 ## Copy `Ctrl+Alt+C`
 Push selected text to stack.
 ## Cut `Ctrl+Alt+X`
