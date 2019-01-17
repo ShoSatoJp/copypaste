@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
             let selection = new vscode.Range(editor.selection.start, editor.selection.end);
             let text = editor.document.getText(selection);
             STACK.push(text);
-            vscode.window.showInformationMessage(STACK.join('\n'));
+            // vscode.window.showInformationMessage(STACK.join('\n'));
         }
     });
     context.subscriptions.push(copy);
