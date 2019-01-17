@@ -1,37 +1,84 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+let statusbar_item = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+
 export function activate(context: vscode.ExtensionContext) {
-    let STACK: string[] = [];
-    let TRASH: string[] = [];
-    let copy = vscode.commands.registerCommand('extension.copypaste.copy', () => {
-        let editor = vscode.window.activeTextEditor;
+    // Initialize
+    let STACK: string[] = [],
+        TRASH: string[] = [];
+
+    statusbar_item.show();
+    statusbar_item.command = 'extension.stackedcopypaste.clear';
+    function LOG() {
+        statusbar_item.text = `Stacked Copy Paste: ${STACK.length}`;
+    }
+    LOG();
+
+    // Copy
+    const copy = vscode.commands.registerCommand('extension.stackedcopypaste.copy', () => {
+        const editor = vscode.window.activeTextEditor;
         if (editor) {
-            let selection = new vscode.Range(editor.selection.start, editor.selection.end);
-            let text = editor.document.getText(selection);
+            const selection = new vscode.Range(editor.selection.start, editor.selection.end);
+            const text = editor.document.getText(selection);
             STACK.push(text);
-            // vscode.window.showInformationMessage(STACK.join('\n'));
+            LOG();
         }
     });
     context.subscriptions.push(copy);
-    let paste = vscode.commands.registerCommand('extension.copypaste.paste', () => {
-        let editor = vscode.window.activeTextEditor;
+
+    // Cut
+    const cut = vscode.commands.registerCommand('extension.stackedcopypaste.cut', () => {
+        const editor = vscode.window.activeTextEditor;
         if (editor) {
-            let start = editor.selection.start;
-            let selection = new vscode.Range(start, editor.selection.end);
+            const selection = new vscode.Range(editor.selection.start, editor.selection.end);
+            const text = editor.document.getText(selection);
+            editor.edit(editBuilder => {
+                editBuilder.delete(selection);
+            });
+            STACK.push(text);
+            LOG();
+        }
+    });
+    context.subscriptions.push(cut);
+
+
+    // Paste
+    const paste = vscode.commands.registerCommand('extension.stackedcopypaste.paste', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const start = editor.selection.start;
+            const selection = new vscode.Range(start, editor.selection.end);
             editor.edit((editBuilder) => {
                 editBuilder.delete(selection);
-                let text: string = STACK.pop() || '';
+                const text: string = STACK.pop() || '';
                 editBuilder.insert(start, text);
                 TRASH.push(text);
+                LOG();
             });
         }
     });
     context.subscriptions.push(paste);
+
+    // Undo
+    const undo = vscode.commands.registerCommand('extension.stackedcopypaste.undo', () => {
+        const text = TRASH.pop();
+        if (text) { 
+            STACK.push(text);
+            LOG();
+        }
+    });
+    context.subscriptions.push(undo);
+
+
+    // Clear
+    let clear = vscode.commands.registerCommand('extension.stackedcopypaste.clear', () => {
+        STACK = [];
+        TRASH = [];
+        LOG();
+    });
+    context.subscriptions.push(clear);
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() {
+    statusbar_item.dispose();
+}

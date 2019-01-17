@@ -1,55 +1,78 @@
 {
-	"name": "copypaste",
-	"displayName": "Copypaste",
-	"description": "",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.27.0"
+    "name": "stackedcopypaste",
+    "displayName": "Stacked Copy Paste",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.1.25"
     },
     "publisher": "shosato",
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
         "*"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.copypaste.copy",
-                "title": "Copypaste Copy"
-			},
-			{
-				"command": "extension.copypaste.paste",
-                "title": "Copypaste Paste"
-			}
-        ],
-        "keybindings":[
+    ],
+    "repository": {
+        "url": "https://github.com/ShoSatoJp/stackedcopypaste.git"
+    },
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [{
+                "command": "extension.stackedcopypaste.copy",
+                "title": "Stacked Copy Paste: Copy"
+            },
             {
-                "command": "extension.copypaste.copy",
+                "command": "extension.stackedcopypaste.paste",
+                "title": "Stacked Copy Paste: Paste"
+            },
+            {
+                "command": "extension.stackedcopypaste.cut",
+                "title": "Stacked Copy Paste: Cut"
+            },
+            {
+                "command": "extension.stackedcopypaste.undo",
+                "title": "Stacked Copy Paste: Undo"
+            },
+            {
+                "command": "extension.stackedcopypaste.clear",
+                "title": "Stacked Copy Paste: Clear"
+            }
+        ],
+        "keybindings": [{
+                "command": "extension.stackedcopypaste.copy",
                 "key": "ctrl+alt+c",
                 "when": "editorTextFocus"
             },
             {
-                "command": "extension.copypaste.paste",
+                "command": "extension.stackedcopypaste.paste",
                 "key": "ctrl+alt+v",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "extension.stackedcopypaste.cut",
+                "key": "ctrl+alt+x",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "extension.stackedcopypaste.undo",
+                "key": "ctrl+alt+z",
                 "when": "editorTextFocus"
             }
         ]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
-	},
-	"devDependencies": {
-		"typescript": "^3.1.4",
-		"vscode": "^1.1.25",
-		"tslint": "^5.8.0",
-		"@types/node": "^8.10.25",
-		"@types/mocha": "^2.2.42"
-	}
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^3.1.4",
+        "vscode": "^1.1.25",
+        "tslint": "^5.8.0",
+        "@types/node": "^8.10.25",
+        "@types/mocha": "^2.2.42"
+    }
 }
